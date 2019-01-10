@@ -1,0 +1,15 @@
+version: '3'
+services:
+  planet-venus:
+    build: .
+    volumes:
+      - static-content:/workspace/www
+  nginx:
+    image: nginx
+    ports:
+      - 80
+    volumes:
+      - static-content:/usr/share/nginx/html:ro
+ 
+volumes:
+  static-content:

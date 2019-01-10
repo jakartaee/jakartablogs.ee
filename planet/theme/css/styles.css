@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2019 Eclipse Foundation, Inc.
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v. 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * Contributors:
+ *   Christopher Guindon <chris.guindon@eclipse-foundation.org>
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+*/ 
+
+#body_solstice {
+  background: #fafafa;
+}
+
+#header-row {
+  padding-bottom: 10px;
+}
+
+.media .pull-left {
+  width: 120px;
+}
+
+.list-channels {
+  margin-left: 10px;
+}
+
+.list-channels img {
+  margin-right: 2px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+/* Fix posts with large images */
+.media-body-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.media-body-content h1 {
+  font-size: 22px;
+}
+
+.media-body-content h2 {
+  font-size: 20px;
+}
+
+.media-body-content h3 {
+  font-size: 18px;
+}
+
+.media-body-content h4, .media-body-content h5, .media-body-content h6 {
+  font-size: 15px;
+}
