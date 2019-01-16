@@ -18,11 +18,12 @@ RUN apt-get update && \
   apt-get install -y planet-venus vim cron git
 
 # Create workspace
-ADD . /workspace/jakartablogs.ee
-RUN mkdir -p /workspace/www && mkdir -p /workspace/cache
+WORKDIR /workspace
+RUN git clone https://github.com/jakartaee/jakartablogs.ee.git \
+  && mkdir -p www && mkdir -p cache
 
 # Create crontab file in the cron directory
-RUN echo "*/5 * * * * root cd /workspace/jakartablogs.ee/planet && planet planet.ini \
+RUN echo "*/5 * * * * root cd /workspace/jakartablogs.ee && git pull origin master && cd planet && planet planet.ini \
   && cp -rf theme/authors /workspace/www && cp -rf theme/css /workspace/www  \
   > /proc/1/fd/1 2>/proc/1/fd/2" \
   > /etc/cron.d/jakartablogs
@@ -32,7 +33,5 @@ RUN chmod 0644 /etc/cron.d/jakartablogs
 
 # Apply cron job
 RUN crontab /etc/cron.d/jakartablogs
-
-WORKDIR /workspace/jakartablogs.ee
 
 CMD ["cron", "-f"]
