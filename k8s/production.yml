@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jakartablogs-ee
+  namespace: webapps
+spec:
+  selector:
+    matchLabels:
+      app: jakartablogs-ee
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: jakartablogs-ee
+        environment: production
+    spec:
+      containers:
+      - name: nginx
+        image: eclipsefdn/nginx:stable-alpine@sha256:bf036b821b469ca13f6e320b73558c2d7e36b3d1967a9eb2aca96d21744995b6
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: planet-www
+          mountPath: /usr/share/nginx/html
+        resources:
+          limits:
+            cpu: '2'
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+      - name: planet-venus
+        image: eclipsefdn/planet-venus:latest@sha256:eebae9c04d55e5bf3df972ed0dc34303c4578791d150798d9447783d5ec67c2a
+        volumeMounts:
+        - name: planet-www
+          mountPath: /var/planet/www
+        - name: planet-cache
+          mountPath: /var/planet/cache
+        - name: planet-config
+          mountPath: /var/planet/config
+        resources:
+          limits:
+            cpu: '2'
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 512Mi
+      initContainers:
+      - name: git-clone
+        image: alpine/git
+        command:
+        - git
+        - clone
+        - "https://github.com/jakartaee/jakartablogs.ee.git"
+        - "/var/planet/config"
+        volumeMounts:
+        - name: planet-config
+          mountPath: "/var/planet/config"
+      volumes:
+      - name: planet-www
+        emptyDir: {}
+      - name: planet-cache
+        emptyDir: {}
+      - name: planet-config
+        emptyDir: {}
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: jakartablogs-ee
+  namespace: webapps
+spec:
+  ports:
+  - name: "http"
+    port: 80
+    protocol: "TCP"
+    targetPort: 8080
+  selector:
+    app: jakartablogs-ee
+    environment: production
+---
+apiVersion: "route.openshift.io/v1"
+kind: "Route"
+metadata:
+  name: jakartablogs-ee
+  namespace: webapps
+  annotations:
+    haproxy.router.openshift.io/timeout: 20s
+spec:
+  host: "jakartablogs.ee"
+  path: "/"
+  port:
+    targetPort: "http"
+  tls:
+    insecureEdgeTerminationPolicy: "Redirect"
+    termination: "edge"
+  to:
+    kind: "Service"
+    name: jakartablogs-ee
+    weight: 100

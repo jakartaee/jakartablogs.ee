@@ -1,15 +1,19 @@
 version: '3'
 services:
   planet-venus:
-    build: .
+    image: eclipsefdn/planet-venus:latest
     volumes:
-      - static-content:/workspace/www
+      - planet-www:/var/planet/www
+      - planet-cache:/var/planet/cache
+      - planet-config:/var/planet/config
   nginx:
-    image: nginx
+    image: eclipsefdn/nginx:stable-alpine
     ports:
       - 80
     volumes:
       - static-content:/usr/share/nginx/html:ro
  
 volumes:
-  static-content:
+  planet-www:
+  planet-cache:
+  planet-config:
