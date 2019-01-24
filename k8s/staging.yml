@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staging-jakartablogs-ee
+  namespace: webapps
+spec:
+  selector:
+    matchLabels:
+      app: jakartablogs-ee
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jakartablogs-ee
+        environment: staging
+    spec:
+      containers:
+      - name: nginx
+        image: eclipsefdn/nginx:stable-alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: planet-www
+          mountPath: /usr/share/nginx/html
+        resources:
+          limits:
+            cpu: '2'
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+      - name: planet-venus
+        image: eclipsefdn/planet-venus:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: planet-www
+          mountPath: /var/planet/www
+        - name: planet-cache
+          mountPath: /var/planet/cache
+        - name: planet-config
+          mountPath: /var/planet/config
+        resources:
+          limits:
+            cpu: '2'
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 512Mi
+      initContainers:
+      - name: git-clone
+        image: alpine/git
+        command:
+        - git
+        - clone
+        - "-b"
+        - "staging"
+        - "https://github.com/jakartaee/jakartablogs.ee.git"
+        - "/var/planet/config"
+        volumeMounts:
+        - name: planet-config
+          mountPath: "/var/planet/config"
+      volumes:
+      - name: planet-www
+        emptyDir: {}
+      - name: planet-cache
+        emptyDir: {}
+      - name: planet-config
+        emptyDir: {}
