@@ -1,7 +1,6 @@
 ---
 name: Add Blog
-about: To add your blog to the feed, please have a look at our [guidelines](https://github.com/jakartaee/jakartablogs.ee#guidelines) and then open a GitHub issue or create a pull request with your feed-specific information.
-
+about: Want to become a Jakarta Blogs author? 
 ---
 
 **Blog RSS Feed URL:
