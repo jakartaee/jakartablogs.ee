@@ -5,9 +5,6 @@ The [jakartablogs.ee](https://jakartablogs.ee) website is generated with [Planet
 Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, 
 technologies, best practices, and compatible products.
 
-## Add your blog
-Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our [guidelines](#guidelines) and then open a [GitHub issue](https://github.com/jakartaee/jakartablogs.ee/issues/new?template=add_blog.md) or create a pull request with your [feed-specific information](#feed-specific-information).
-
 ## Guidelines
 
 We (the admins) generally ask ourselves the following questions before adding a feed to Jakarta Blogs:
@@ -20,9 +17,9 @@ We (the admins) generally ask ourselves the following questions before adding a 
 * Does the feed add more value to Jakarta Blogs and the Jakarta EE community than it does for the feed owner?
 * Is there more than just a welcome posting?
 * Does the feed contain advertisements?
- 
-### Feed-specific information
-1. By opening a GitHub issue
+
+## How to add your blog
+1. By opening a [GitHub issue](https://github.com/jakartaee/jakartablogs.ee/issues/new?template=add_blog.md)
 2. By creating a pull request
 
 The issue or pull request must include a picture (185x185), the RSS feed url for the blog and the full name of the author.
