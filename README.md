@@ -2,9 +2,42 @@
 
 The [jakartablogs.ee](https://jakartablogs.ee) website is generated with [Planet Venus](https://github.com/rubys/venus).
 
-Jakarta Enterprise Edition (EE) is the future of cloud native Java. Jakarta EE open source software drives cloud native innovation, modernizes enterprise applications and protects investments in Java EE.
+Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, 
+technologies, best practices, and compatible products.
 
-## Getting started
+## Add your blog section:
+Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our guidelines and then open a GitHub issue or create a pull request with your feed-specific information.
+
+## Guidelines:
+
+We (the admins) generally ask ourselves the following questions before adding a feed to Jakarta Blogs:
+
+* Is the feed written by a real person?
+* Is the person an EE4J committer or contributor?
+* Is the ratio of off-topic postings not too high?
+* Are the off-topic postings covered by the Jakarta Blogs tag line?
+* Does the feed promote a company or a commercial product?
+* Does the feed add more value to Jakarta Blogs and the Jakarta EE community than it does for the feed owner?
+* Is there more than just a welcome posting?
+* Does the feed contain advertisements?
+ 
+## How to add your blog
+1. By opening a GitHub issue
+2. By creating a pull request
+
+The issue or pull request must include a picture (185x185), the RSS feed url for the blog and the full name of the author.
+
+If the contributor chose to submit a pull request, this information must be added to planet/planet.ini file as follows:
+
+~~~~
+[https://blogs.eclipse.org/blog/180/feed]
+name = Tanja Obradovic
+picture = tanja-obradovic.jpg
+~~~~
+
+Pictures must be added to the planet/theme/authors folder.
+
+## Getting started (Local development)
 
 How to run the application:
 
