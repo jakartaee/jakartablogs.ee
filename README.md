@@ -6,7 +6,7 @@ Welcome to the blog home of open source, cloud native Java innovation! Read post
 technologies, best practices, and compatible products.
 
 ## Add your blog
-Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our guidelines and then open a GitHub issue or create a pull request with your feed-specific information.
+Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our [guidelines](#guidelines) and then open a [GitHub issue](https://github.com/jakartaee/jakartablogs.ee/issues/new?template=add_blog.md) or create a pull request with your feed-specific information.
 
 ## Guidelines:
 
