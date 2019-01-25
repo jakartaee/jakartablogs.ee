@@ -21,7 +21,7 @@ We (the admins) generally ask ourselves the following questions before adding a 
 * Is there more than just a welcome posting?
 * Does the feed contain advertisements?
  
-## How to add your blog
+### Instructions
 1. By opening a GitHub issue
 2. By creating a pull request
 
