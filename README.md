@@ -5,7 +5,7 @@ The [jakartablogs.ee](https://jakartablogs.ee) website is generated with [Planet
 Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, 
 technologies, best practices, and compatible products.
 
-## Add your blog section:
+## Add your blog:
 Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our guidelines and then open a GitHub issue or create a pull request with your feed-specific information.
 
 ## Guidelines:
