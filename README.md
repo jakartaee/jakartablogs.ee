@@ -8,7 +8,7 @@ technologies, best practices, and compatible products.
 ## Add your blog
 Want to become a Jakarta Blogs author? To add your blog to the feed, please have a look at our [guidelines](#guidelines) and then open a [GitHub issue](https://github.com/jakartaee/jakartablogs.ee/issues/new?template=add_blog.md) or create a pull request with your feed-specific information.
 
-## Guidelines:
+## Guidelines
 
 We (the admins) generally ask ourselves the following questions before adding a feed to Jakarta Blogs:
 
