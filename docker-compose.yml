@@ -1,19 +1,16 @@
 version: '3'
 services:
   planet-venus:
-    image: eclipsefdn/planet-venus:latest
+    build: .
     volumes:
-      - planet-www:/var/planet/www
-      - planet-cache:/var/planet/cache
-      - planet-config:/var/planet/config
+      - static-content:/var/planet/www
+      - ./:/var/planet/jakartablogs.ee
   nginx:
-    image: eclipsefdn/nginx:stable-alpine
+    image: nginx
     ports:
       - 80
     volumes:
       - static-content:/usr/share/nginx/html:ro
  
 volumes:
-  planet-www:
-  planet-cache:
-  planet-config:
+  static-content:
