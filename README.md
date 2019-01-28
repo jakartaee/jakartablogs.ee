@@ -13,7 +13,6 @@ We (the admins) generally ask ourselves the following questions before adding a 
 * Is the person an EE4J committer or contributor?
 * Is the ratio of off-topic postings not too high?
 * Are the off-topic postings covered by the Jakarta Blogs tag line?
-* Does the feed promote a company or a commercial product?
 * Does the feed add more value to Jakarta Blogs and the Jakarta EE community than it does for the feed owner?
 * Is there more than just a welcome posting?
 * Does the feed contain advertisements?
