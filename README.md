@@ -2,14 +2,13 @@
 
 The [jakartablogs.ee](https://jakartablogs.ee) website is generated with [Planet Venus](https://github.com/rubys/venus).
 
-Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, 
-technologies, best practices, and compatible products.
+Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, technologies, best practices, and compatible products.
 
 ## Aggregated Feed
 Jakarta Blogs provides one aggregated feed: 
 [https://jakartablogs.ee/rss20.xml](https://jakartablogs.ee/rss20.xml)
 
-You can subscribe to the feed with your favorite feed reader or read them online at [Jakartablogs.ee](https://Jakartablogs.ee).
+You can subscribe to the feed with your favorite feed reader or read the feed online at [Jakartablogs.ee](https://Jakartablogs.ee).
 
 ## Guidelines
 
