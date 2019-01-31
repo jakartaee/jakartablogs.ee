@@ -36,9 +36,9 @@ name = Tanja Obradovic
 picture = tanja-obradovic.jpg
 ~~~~
 
-:exclamation: **TIP:** If your blog contains other topics than Jakarta EE, use categories to filter the feed, e.g. ```<your blog>/category/jakarta-ee/feed/```.
-
 Pictures must be added to the planet/theme/authors folder.
+
+:exclamation: **TIP:** If your blog contains other topics than Jakarta EE, use categories to filter the feed, e.g. ```<your blog>/category/jakarta-ee/feed/```.
 
 ## Getting started (Local development)
 
