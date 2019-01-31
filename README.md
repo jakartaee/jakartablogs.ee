@@ -6,7 +6,7 @@ Welcome to the blog home of open source, cloud native Java innovation! Read post
 
 ## Aggregated Feed
 Jakarta Blogs provides one aggregated feed: 
-[https://jakartablogs.ee/rss20.xml](https://jakartablogs.ee/rss20.xml)
+[http://feeds.feedburner.com/jakartaeeblogs](http://feeds.feedburner.com/jakartaeeblogs)
 
 You can subscribe to the feed with your favorite feed reader or read the feed online at [Jakartablogs.ee](https://Jakartablogs.ee).
 
