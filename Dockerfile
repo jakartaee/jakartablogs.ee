@@ -24,7 +24,7 @@ RUN git clone https://github.com/jakartaee/jakartablogs.ee.git \
 
 # Create crontab file in the cron directory
 RUN echo "*/5 * * * * root { cd /var/planet/jakartablogs.ee && cd planet && planet planet.ini \
-  && cp -rf theme/authors /var/planet/www && cp -rf theme/css /var/planet/www  ;} \
+  && cp -rf theme/authors /var/planet/www && cp -rf theme/css /var/planet/www && cp -rf theme/images /var/planet/www  ;} \
   2> /proc/1/fd/1" \
   > /etc/cron.d/jakartablogs
 
