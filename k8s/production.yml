@@ -30,7 +30,7 @@ spec:
             cpu: 200m
             memory: 512Mi
       - name: planet-venus
-        image: eclipsefdn/planet-venus:latest@sha256:eebae9c04d55e5bf3df972ed0dc34303c4578791d150798d9447783d5ec67c2a
+        image: eclipsefdn/planet-venus:latest@sha256:3429840331ec4cfe3c35973d3b661fea42d7d89a7c3a72cea2c19ef214ad18b3
         volumeMounts:
         - name: planet-www
           mountPath: /var/planet/www
