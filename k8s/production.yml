@@ -46,6 +46,15 @@ spec:
             cpu: 50m
             memory: 512Mi
       initContainers:
+      - name: clean-volume
+        image: busybox
+        command:
+        - rm
+        - "-rf"
+        - "/var/planet/config"
+        volumeMounts:
+        - name: planet-config
+          mountPath: "/var/planet/config"
       - name: git-clone
         image: alpine/git
         command:
