@@ -51,7 +51,7 @@ spec:
         command:
         - rm
         - "-rf"
-        - "/var/planet/config"
+        - "/var/planet/config/*"
         volumeMounts:
         - name: planet-config
           mountPath: "/var/planet/config"
