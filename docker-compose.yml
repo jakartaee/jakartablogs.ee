@@ -1,16 +1,24 @@
 version: '3'
 services:
   planet-venus:
-    build: .
+    user: root
+    build: 
+      context: .
+      args: 
+        THEME_PATH: /var/planet/theme
+        CACHE_PATH: /var/planet/cache
+        WWW_PATH: /var/planet/www
     volumes:
       - static-content:/var/planet/www
-      - ./:/var/planet/jakartablogs.ee
+      - cache:/var/planet/cache
   nginx:
-    image: nginx
+    user: root
+    image: eclipsefdn/nginx:stable-alpine
     ports:
-      - 80
+      - 8080
     volumes:
       - static-content:/usr/share/nginx/html:ro
  
 volumes:
   static-content:
+  cache: 
