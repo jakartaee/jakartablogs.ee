@@ -23,7 +23,7 @@ pipeline {
       returnStdout: true
     )
     IMAGE_TAG = sh(
-      script: "printf ${ENVIRONMENT:+${ENVIRONMENT}-}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}",
+      script: "printf ${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}",
       returnStdout: true
     )
   }
