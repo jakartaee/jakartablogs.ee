@@ -22,10 +22,6 @@ pipeline {
       script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
       returnStdout: true
     )
-    IMAGE_TAG = sh(
-      script: "printf ${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}",
-      returnStdout: true
-    )
   }
 
   options {
@@ -50,12 +46,12 @@ pipeline {
             --build-arg THEME_PATH="${THEME_PATH}" \
             --build-arg WWW_PATH="${WWW_PATH}" \
             --build-arg CACHE_PATH="${CACHE_PATH}" \
-            -t ${IMAGE_NAME}:${IMAGE_TAG} \
+            -t ${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER} \
             -t ${IMAGE_NAME}:latest .
         '''
         withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
           sh '''
-            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+            docker push ${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}
             docker push ${IMAGE_NAME}:latest
           '''
         }
@@ -83,7 +79,7 @@ pipeline {
               def appSelector = openshift.selector('deployments', [app: "${APP_NAME}", environment: "${ENVIRONMENT}"])
               appSelector.describe()
               def app = appSelector.object()
-              app.spec.template.spec.containers[1].image = "${IMAGE_NAME}"+':'+"${IMAGE_TAG}"
+              app.spec.template.spec.containers[1].image = "${IMAGE_NAME}"+':'+"${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}"
               openshift.apply(app)
               timeout(5) {
                 appSelector.rollout().status()
