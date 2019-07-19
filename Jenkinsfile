@@ -20,7 +20,7 @@ pipeline {
       spec:
         containers:
         - name: kubectl
-          image: eclipsefdn:kubectl:1.9-alpine
+          image: eclipsefdn/kubectl:1.9-alpine
           command:
           - cat
           tty: true
