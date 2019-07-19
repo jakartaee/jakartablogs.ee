@@ -9,6 +9,7 @@ spec:
       app: jakartablogs-ee
       environment: production
   replicas: 2
+  progressDeadlineSeconds: 600
   template:
     metadata:
       labels:
@@ -31,6 +32,20 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 600
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          timeoutSeconds: 5
       - name: planet-venus
         image: eclipsefdn/jakartablogs.ee:latest
         volumeMounts:

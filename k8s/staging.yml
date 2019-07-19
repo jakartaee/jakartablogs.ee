@@ -9,6 +9,7 @@ spec:
       app: jakartablogs-ee
       environment: staging
   replicas: 1
+  progressDeadlineSeconds: 600
   template:
     metadata:
       labels:
@@ -31,6 +32,26 @@ spec:
           requests:
             cpu: 50m
             memory: 128Mi
+        livenessProbe:
+          # cannot use http probe because / and below are protected by auth_basic
+          exec:
+            command:
+            - test 
+            - -f
+            - /usr/share/nginx/html/staging/index.html
+          initialDelaySeconds: 600
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          # cannot use http probe because / and below are protected by auth_basic
+          exec:
+            command:
+            - test 
+            - -f
+            - /usr/share/nginx/html/staging/index.html
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          timeoutSeconds: 5
       - name: planet-venus
         image: eclipsefdn/jakartablogs.ee:latest
         volumeMounts:
