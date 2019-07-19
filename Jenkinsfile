@@ -95,13 +95,13 @@ pipeline {
         container('kubectl') {
           withKubeConfig([credentialsId: '1d8095ea-7e9d-4e94-b799-6dadddfdd18a', serverUrl: 'https://console-int.c1-ci.eclipse.org']) {
             sh '''
-              DEPLOYMENT=$(k8s getFirst deployment "${NAMESPACE}" "app=${APP_NAME},environment=${ENVIRONMENT}")
+              DEPLOYMENT="$(k8s getFirst deployment "${NAMESPACE}" "app=${APP_NAME},environment=${ENVIRONMENT}")"
               if [[ $(echo "${resource}" | jq -r 'length') -eq 0 ]]; then
                 echo "ERROR: Unable to find a deployment to patch matching '${selector}' in namespace ${namespace}"
                 exit 1
               else 
-                DEPLOYMENT_NAME=$(echo "${DEPLOYMENT}" | jq -r '.metadata.name')
-                kubectl set image deployment.v1.apps/"${DEPLOYMENT_NAME}" -n "${NAMESPACE}" "${CONTAINER_NAME}="${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}" --record=true
+                DEPLOYMENT_NAME="$(echo "${DEPLOYMENT}" | jq -r '.metadata.name')"
+                kubectl set image "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}" "${CONTAINER_NAME}=${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}" --record=true
                 if ! kubectl rollout status "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"; then
                   # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
                   kubectl rollout undo "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"
@@ -117,12 +117,7 @@ pipeline {
   post {
     always {
       deleteDir() /* clean up workspace */
-    }
-    unsuccessful { // either unstable or failed
-      sendNotifications currentBuild.result
-    }
-    fixed { // back to normal
-      sendNotifications 'FIXED'
+      sendNotifications currentBuild
     }
   }
 }
