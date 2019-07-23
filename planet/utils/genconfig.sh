@@ -40,3 +40,7 @@ done
 for f in "${THEME_FOLDER}/css/"*; do
   echo "  $(realpath --relative-to="${THEME_FOLDER}" "${f}")"
 done
+
+for f in "${THEME_FOLDER}/images/"*; do
+  echo "  $(realpath --relative-to="${THEME_FOLDER}" "${f}")"
+done
