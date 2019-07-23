@@ -110,6 +110,7 @@ pipeline {
                 if ! kubectl rollout status "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"; then
                   # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
                   kubectl rollout undo "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"
+                  exit 1
                 fi
               fi
             '''
