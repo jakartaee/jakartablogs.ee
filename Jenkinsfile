@@ -44,6 +44,11 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '10'))
   }
 
+  triggers { 
+    // build once a week to keep up with parents images updates
+    cron('H H * * H') 
+  }
+
   stages {
     stage('Build and push image') {
       agent {
