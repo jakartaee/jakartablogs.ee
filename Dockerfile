@@ -7,14 +7,14 @@
 #*****************************************************************************
 
 # Create the theme config.ini
-FROM debian:buster-slim AS configbuilder
+FROM debian:10-slim AS configbuilder
 
 ARG THEME_PATH
 
 COPY planet/ /tmp/planet
 RUN /tmp/planet/utils/genconfig.sh "${THEME_PATH}" "/tmp/planet/theme" > /tmp/config.ini
 
-FROM eclipsefdn/planet-venus:buster-slim
+FROM eclipsefdn/planet-venus:debian-10-slim
 
 ARG THEME_PATH
 ARG CACHE_PATH
