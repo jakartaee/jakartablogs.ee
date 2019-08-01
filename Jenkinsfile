@@ -38,6 +38,16 @@ pipeline {
       script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
       returnStdout: true
     )
+    TAG_NAME = sh(
+      script: """
+        if [ ${env.ENVIRONMENT} = '' ]; then
+          printf ${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
+        else
+          printf ${env.ENVIRONMENT}-${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
+        fi
+      """,
+      returnStdout: true
+    )
   }
 
   options {
@@ -63,7 +73,7 @@ pipeline {
             --build-arg THEME_PATH="${THEME_PATH}" \
             --build-arg WWW_PATH="${WWW_PATH}" \
             --build-arg CACHE_PATH="${CACHE_PATH}" \
-            -t ${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER} \
+            -t ${IMAGE_NAME}:${TAG_NAME} \
             -t ${IMAGE_NAME}:latest .
         '''
       }
@@ -82,7 +92,7 @@ pipeline {
       steps {
         withDockerRegistry([credentialsId: '04264967-fea0-40c2-bf60-09af5aeba60f', url: 'https://index.docker.io/v1/']) {
           sh '''
-            docker push ${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}
+            docker push ${IMAGE_NAME}:${TAG_NAME}
             docker push ${IMAGE_NAME}:latest
           '''
         }
@@ -106,7 +116,7 @@ pipeline {
                 exit 1
               else 
                 DEPLOYMENT_NAME="$(echo "${DEPLOYMENT}" | jq -r '.metadata.name')"
-                kubectl set image "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}" "${CONTAINER_NAME}=${IMAGE_NAME}:${ENVIRONMENT:+"${ENVIRONMENT}-"}${GIT_COMMIT_SHORT}-${BUILD_NUMBER}" --record=true
+                kubectl set image "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}" "${CONTAINER_NAME}=${IMAGE_NAME}:${TAG_NAME}" --record=true
                 if ! kubectl rollout status "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"; then
                   # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
                   kubectl rollout undo "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"
