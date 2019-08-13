@@ -40,7 +40,7 @@ pipeline {
     )
     TAG_NAME = sh(
       script: """
-        if [ ${env.ENVIRONMENT} = '' ]; then
+        if [ "${env.ENVIRONMENT}" = "" ]; then
           printf ${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
         else
           printf ${env.ENVIRONMENT}-${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
