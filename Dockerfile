@@ -1,37 +1,43 @@
-#
-# Copyright (c) 2019 Eclipse Foundation, Inc.
-# 
-# This program and the accompanying materials are made available under the
-# terms of the Eclipse Public License v. 2.0 which is available at
-# http://www.eclipse.org/legal/epl-2.0.
-# 
-# Contributors:
-#   Christopher Guindon <chris.guindon@eclipse-foundation.org>
-# 
+#*****************************************************************************
+# Copyright (c) 2019 Eclipse Foundation and others.
+# This program and the accompanying materials are made available
+# under the terms of the Eclipse Public License 2.0
+# which is available at http://www.eclipse.org/legal/epl-v20.html
 # SPDX-License-Identifier: EPL-2.0
+#*****************************************************************************
 
-FROM debian:jessie
-MAINTAINER Christopher Guindon <chris.guindon@eclipse-foundation.org>
+# Create the theme config.ini
+FROM debian:10-slim AS configbuilder
 
-# Install requirements
-RUN apt-get update && \
-  apt-get install -y planet-venus vim cron git
+ARG THEME_PATH
 
-# Create workspace
+COPY planet/ /tmp/planet
+RUN /tmp/planet/utils/genconfig.sh "${THEME_PATH}" "/tmp/planet/theme" > /tmp/config.ini
+
+FROM eclipsefdn/planet-venus:debian-10-slim
+
+ARG THEME_PATH
+ARG CACHE_PATH
+ARG WWW_PATH
+
 WORKDIR /var/planet
-RUN git clone https://github.com/jakartaee/jakartablogs.ee.git \
-  && mkdir -p www && mkdir -p cache
 
-# Create crontab file in the cron directory
-RUN echo "*/5 * * * * root { cd /var/planet/jakartablogs.ee && cd planet && planet planet.ini \
-  && cp -rf theme/authors /var/planet/www && cp -rf theme/css /var/planet/www  ;} \
-  2> /proc/1/fd/1" \
-  > /etc/cron.d/jakartablogs
+# CACHE_PATH and WWW_PATH should be mounted as volumes, 
+# but in case they are not, make sure that they exist
+RUN mkdir -p "${THEME_PATH}" && chmod -R g+w "${THEME_PATH}" \
+  && mkdir -p "${CACHE_PATH}" && chmod -R g+w "${CACHE_PATH}" \
+  && mkdir -p "${WWW_PATH}" && chmod -R g+w "${WWW_PATH}"
 
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/jakartablogs
+COPY planet/planet.ini /var/planet/
+COPY planet/theme "${THEME_PATH}"
+COPY --from=configbuilder /tmp/config.ini "${THEME_PATH}"/
 
-# Apply cron job
-RUN crontab /etc/cron.d/jakartablogs
+# This volume needs to be mounted inside a HTTP server container as the document root
+VOLUME [ "${WWW_PATH}", "${CACHE_PATH}" ]
 
-CMD ["cron", "-f"]
+USER 10001:0
+
+# Change refresh frequency to once every hour
+# ENV REFRESH_FREQUENCY_SECONDS 3600
+
+CMD [ "update-planet.sh", "/var/planet" ]

@@ -2,12 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jakartablogs-ee
-  namespace: webapps
+  namespace: foundation-internal-webdev-apps
 spec:
   selector:
     matchLabels:
       app: jakartablogs-ee
+      environment: production
   replicas: 2
+  progressDeadlineSeconds: 600
   template:
     metadata:
       labels:
@@ -16,7 +18,8 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: eclipsefdn/nginx:stable-alpine@sha256:bf036b821b469ca13f6e320b73558c2d7e36b3d1967a9eb2aca96d21744995b6
+        image: eclipsefdn/nginx:stable-alpine
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -29,15 +32,27 @@ spec:
           requests:
             cpu: 200m
             memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 600
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          timeoutSeconds: 5
       - name: planet-venus
-        image: eclipsefdn/planet-venus:latest@sha256:eebae9c04d55e5bf3df972ed0dc34303c4578791d150798d9447783d5ec67c2a
+        image: eclipsefdn/jakartablogs.ee:latest
         volumeMounts:
         - name: planet-www
           mountPath: /var/planet/www
         - name: planet-cache
           mountPath: /var/planet/cache
-        - name: planet-config
-          mountPath: /var/planet/config
         resources:
           limits:
             cpu: '2'
@@ -45,30 +60,17 @@ spec:
           requests:
             cpu: 50m
             memory: 512Mi
-      initContainers:
-      - name: git-clone
-        image: alpine/git
-        command:
-        - git
-        - clone
-        - "https://github.com/jakartaee/jakartablogs.ee.git"
-        - "/var/planet/config"
-        volumeMounts:
-        - name: planet-config
-          mountPath: "/var/planet/config"
       volumes:
       - name: planet-www
         emptyDir: {}
       - name: planet-cache
-        emptyDir: {}
-      - name: planet-config
         emptyDir: {}
 ---
 apiVersion: "v1"
 kind: "Service"
 metadata:
   name: jakartablogs-ee
-  namespace: webapps
+  namespace: foundation-internal-webdev-apps
 spec:
   ports:
   - name: "http"
@@ -83,9 +85,11 @@ apiVersion: "route.openshift.io/v1"
 kind: "Route"
 metadata:
   name: jakartablogs-ee
-  namespace: webapps
+  namespace: foundation-internal-webdev-apps
   annotations:
     haproxy.router.openshift.io/timeout: 20s
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/balance: roundrobin
 spec:
   host: "jakartablogs.ee"
   path: "/"

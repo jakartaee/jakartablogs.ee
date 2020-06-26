@@ -35,7 +35,7 @@
     <meta name="twitter:description" content="Jakarta Enterprise Edition (EE) is the future of cloud native Java. Jakarta EE open source software drives cloud native innovation, modernizes enterprise applications and protects investments in Java EE."/>
     <meta name="twitter:image" content="https://jakarta.ee/images/jakarta/jakarta_ee_400x400.png"/>
     <link href="//fonts.googleapis.com/css?family=Libre+Franklin:400,700,300,600,100" rel="stylesheet" type="text/css"/>
-    <link rel="alternate" type="application/atom+xml" title="<TMPL_VAR name> (Atom)" href="atom.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Subscribe to jakartablogs.ee" href="http://feeds.feedburner.com/jakartaeeblogs" />
     <link rel="stylesheet" href="https://jakarta.ee/css/styles.css">
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
   </head>
@@ -159,14 +159,15 @@
     </header>
     <section id="breadcrumb" class="default-breadcrumbs margin-bottom-20 hidden-print">
       <div class="container">
-        <div class="col-xs-15">
+        <div class="col-sm-15 col-xs-8">
           <ol class="breadcrumb">
             <li><a href="https://jakarta.ee/">Home</a></li>
             <li class="active">Blogs</li>
           </ol>
         </div>
-        <div class="col-xs-9 margin-top-5 text-right">
+        <div class="col-sm-9 col-xs-16 margin-top-5 text-right padding-right-0">
           <a href="https://twitter.com/JakartaEEBlogs" class="twitter-follow-button" data-show-count="false">Follow @JakartaEEBlogs</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          <span style="font-size: 23px;line-height: 0;position: relative;top: -2px;"><a href="/rss20.xml "><i class="fa fa-rss-square orange" aria-hidden="true"></i></a></span>
         </div>
       </div>
     </section>
@@ -295,6 +296,12 @@
           <div class="modal-body">
             <p>Welcome to the blog home of open source, cloud native Java innovation! Read posts from our global community on Jakarta EE news, 
             technologies, best practices, and compatible products.</p>
+            <hr>
+            <ul class="list-inline">
+              <li><a href="/rss20.xml"><img alt="RSS 2.0" src="images/rss20.png"></a></li>
+              <li><a href="/atom.xml"><img alt="Atom" src="images/atom.png"></a></li>
+              <li><a href="/opml.xml"><img alt="OPML" src="images/opml.png"></a></li>
+            </ul>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

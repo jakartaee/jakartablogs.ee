@@ -2,12 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: staging-jakartablogs-ee
-  namespace: webapps
+  namespace: foundation-internal-webdev-apps
 spec:
   selector:
     matchLabels:
       app: jakartablogs-ee
+      environment: staging
   replicas: 1
+  progressDeadlineSeconds: 600
   template:
     metadata:
       labels:
@@ -16,54 +18,93 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: eclipsefdn/nginx:stable-alpine
+        image: eclipsefdn/nginx:stable-alpine-for-staging
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
         volumeMounts:
         - name: planet-www
-          mountPath: /usr/share/nginx/html
+          mountPath: /usr/share/nginx/html/staging
         resources:
           limits:
-            cpu: '2'
-            memory: 512Mi
+            cpu: '1'
+            memory: 256Mi
           requests:
-            cpu: 200m
-            memory: 512Mi
+            cpu: 50m
+            memory: 128Mi
+        livenessProbe:
+          # cannot use http probe because / and below are protected by auth_basic
+          exec:
+            command:
+            - test 
+            - -f
+            - /usr/share/nginx/html/staging/index.html
+          initialDelaySeconds: 600
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          # cannot use http probe because / and below are protected by auth_basic
+          exec:
+            command:
+            - test 
+            - -f
+            - /usr/share/nginx/html/staging/index.html
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          timeoutSeconds: 5
       - name: planet-venus
-        image: eclipsefdn/planet-venus:latest
-        imagePullPolicy: Always
+        image: eclipsefdn/jakartablogs.ee:latest
         volumeMounts:
         - name: planet-www
           mountPath: /var/planet/www
         - name: planet-cache
           mountPath: /var/planet/cache
-        - name: planet-config
-          mountPath: /var/planet/config
         resources:
           limits:
-            cpu: '2'
-            memory: 512Mi
+            cpu: '1'
+            memory: 256Mi
           requests:
             cpu: 50m
-            memory: 512Mi
-      initContainers:
-      - name: git-clone
-        image: alpine/git
-        command:
-        - git
-        - clone
-        - "-b"
-        - "staging"
-        - "https://github.com/jakartaee/jakartablogs.ee.git"
-        - "/var/planet/config"
-        volumeMounts:
-        - name: planet-config
-          mountPath: "/var/planet/config"
+            memory: 256Mi
       volumes:
       - name: planet-www
         emptyDir: {}
       - name: planet-cache
         emptyDir: {}
-      - name: planet-config
-        emptyDir: {}
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: staging-jakartablogs-ee
+  namespace: foundation-internal-webdev-apps
+spec:
+  ports:
+  - name: "http"
+    port: 80
+    protocol: "TCP"
+    targetPort: 8080
+  selector:
+    app: jakartablogs-ee
+    environment: staging
+---
+apiVersion: "route.openshift.io/v1"
+kind: "Route"
+metadata:
+  name: staging-jakartablogs-ee
+  namespace: foundation-internal-webdev-apps
+  annotations:
+    haproxy.router.openshift.io/timeout: 20s
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/balance: roundrobin
+spec:
+  host: "jakartablogs.ee"
+  path: "/staging"
+  port:
+    targetPort: "http"
+  tls:
+    insecureEdgeTerminationPolicy: "Redirect"
+    termination: "edge"
+  to:
+    kind: "Service"
+    name: staging-jakartablogs-ee
+    weight: 100
