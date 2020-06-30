@@ -8,16 +8,6 @@ spec:
     matchLabels:
       app: jakartablogs-ee
       environment: staging
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - preference:
-          matchExpressions:
-          - key: speed
-            operator: NotIn
-            values:
-            - fast
-        weight: 1
   replicas: 1
   progressDeadlineSeconds: 600
   template:
@@ -26,6 +16,16 @@ spec:
         app: jakartablogs-ee
         environment: staging
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: speed
+                operator: NotIn
+                values:
+                - fast
+            weight: 1
       containers:
       - name: nginx
         image: eclipsefdn/nginx:stable-alpine-for-staging
