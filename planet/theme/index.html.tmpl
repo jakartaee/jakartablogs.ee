@@ -34,7 +34,7 @@
     <meta name="twitter:url" content="http://jakartablogs.ee"/>
     <meta name="twitter:description" content="Jakarta Enterprise Edition (EE) is the future of cloud native Java. Jakarta EE open source software drives cloud native innovation, modernizes enterprise applications and protects investments in Java EE."/>
     <meta name="twitter:image" content="https://jakarta.ee/images/jakarta/jakarta_ee_400x400.png"/>
-    <link href="//fonts.googleapis.com/css?family=Libre+Franklin:400,700,300,600,100" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" type="text/css"/>
     <link rel="alternate" type="application/rss+xml" title="Subscribe to jakartablogs.ee" href="http://feeds.feedburner.com/jakartaeeblogs" />
     <link rel="stylesheet" href="https://jakarta.ee/css/styles.css">
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
@@ -328,18 +328,35 @@
         </div>
       </div>
     </div>
+    
+    <div class="background-secondary featured-footer" id="featured-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-24">
+            <p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </p>
+            <h2>Sign up to our Newsletter</h2>
+            <span>
+              <form action="https://eclipsecon.us6.list-manage.com/subscribe/post" method="post" target="_blank">
+                <div class="form-group">
+                  <input type="hidden" name="u" value="eaf9e1f06f194eadc66788a85">
+                  <input type="hidden" name="id" value="98ae69e304">
+                </div>
+                <input type="submit" value="Subscribe" name="subscribe" class="button btn btn-primary">
+              </form>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <p id="back-to-top">
       <a class="visible-xs" href="#top">Back to the top</a>
     </p>
-    
-    <div class="background-secondary events padding-bottom-50 padding-top-30">
-      <div class="container">
-        <h3 class="text-center heading-line margin-top-45"><span>Submit your event</span></h3>
-        <h3 class="h5 text-center">If you have a community event you would like listed on our events page, please fill out and submit the Event Request form.</h3>
-        <p class="text-center padding-top-10"><a class="btn btn-primary" href="https://goo.gl/forms/xIlhGdX1qfKCyCZn1" target="_blank">Submit Event</a></p>
-      </div>
-    </div>
     <footer id="solstice-footer">
       <div class="container">
         <div class="row">
@@ -349,7 +366,9 @@
               <li><a href="https://www.eclipse.org/org/">About Us</a></li>
               <li><a href="https://www.eclipse.org/org/foundation/contact.php">Contact Us</a></li>
               <li><a href="https://www.eclipse.org/donate">Donate</a></li>
+              <li><a href="https://www.eclipse.org/membership">Members</a></li>
               <li><a href="https://www.eclipse.org/org/documents/">Governance</a></li>
+              <li><a href="https://www.eclipse.org/org/documents/Community_Code_of_Conduct.php">Code of Conduct</a></li>
               <li><a href="https://www.eclipse.org/artwork/">Logo and Artwork</a></li>
               <li><a href="https://www.eclipse.org/org/foundation/directors.php">Board of Directors</a></li>
             </ul>
@@ -379,9 +398,10 @@
             <h2 class="section-title">Other</h2>
             <ul class="nav">
               <li><a href="https://www.eclipse.org/ide/">IDE and Tools</a></li>
-              <li><a href="https://www.eclipse.org/projects">Community of Projects</a></li>
+              <li><a href="https://www.eclipse.org/projects">Projects</a></li>
               <li><a href="https://www.eclipse.org/org/workinggroups/">Working Groups</a></li>
-              <li><a href="https://www.eclipse.org/org/research/"><span class="__cf_email__" data-cfemail="adffc8dec8ccdfcec5ede8cec1c4dddec8">[email&#160;protected]</span></a></li>
+              <li><a href="https://www.eclipse.org/org/research/">Research@Eclipse</a></li>
+              <li><a href="https://www.eclipse.org/security/">Report a Vulnerability</a></li>
               <li><a href="https://status.eclipse.org">Service Status</a></li>
             </ul>
           </section>
@@ -393,33 +413,31 @@
               <div class="col-md-8 social-media">
                 <ul class="list-inline">
                   <li>
-                    <a class="social-media-link fa-stack fa-lg" href="https://twitter.com/EclipseFdn">
+                    <a class="social-media-link fa-stack fa-lg" href="https://twitter.com/JakartaEE">
                     <i class="fa fa-circle-thin fa-stack-2x"></i>
                     <i class="fa fa-twitter fa-stack-1x"></i>
+                    <span class="sr-only">Twitter account</span>
                     </a>
                   </li>
                   <li>
-                    <a class="social-media-link fa-stack fa-lg" href="https://plus.google.com/+Eclipse">
-                    <i class="fa fa-circle-thin fa-stack-2x"></i>
-                    <i class="fa fa-google-plus fa-stack-1x"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="social-media-link fa-stack fa-lg" href="https://www.facebook.com/eclipse.org">
+                    <a class="social-media-link fa-stack fa-lg" href="https://www.facebook.com/JakartaEE">
                     <i class="fa fa-circle-thin fa-stack-2x"></i>
                     <i class="fa fa-facebook fa-stack-1x"></i>
+                    <span class="sr-only">Facebook account</span>
                     </a>
                   </li>
                   <li>
-                    <a class="social-media-link fa-stack fa-lg" href="https://www.youtube.com/user/EclipseFdn">
+                    <a class="social-media-link fa-stack fa-lg" href="https://www.youtube.com/channel/UC4M7h5b6elu9VlzjLfzuXyg">
                     <i class="fa fa-circle-thin fa-stack-2x"></i>
                     <i class="fa fa-youtube fa-stack-1x"></i>
+                    <span class="sr-only">Youtube account</span>
                     </a>
                   </li>
                   <li>
-                    <a class="social-media-link fa-stack fa-lg" href="https://www.linkedin.com/company/eclipse-foundation">
+                    <a class="social-media-link fa-stack fa-lg" href="https://www.linkedin.com/groups/13597511/" title="">
                     <i class="fa fa-circle-thin fa-stack-2x"></i>
                     <i class="fa fa-linkedin fa-stack-1x"></i>
+                    <span class="sr-only">Linkedin account</span>
                     </a>
                   </li>
                 </ul>
