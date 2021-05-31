@@ -1,15 +1,5 @@
 @Library('common-shared') _
 
-def environmentFromBranch(branch) {
-  if (branch == 'master') {
-    return 'production'
-  } else if (branch == 'staging') {
-    return 'staging'
-  } else {
-   return ''
-  }
-}
-
 pipeline {
   agent {
     kubernetes {
@@ -20,7 +10,7 @@ pipeline {
       spec:
         containers:
         - name: kubectl
-          image: eclipsefdn/kubectl:1.9-alpine
+          image: eclipsefdn/kubectl:okd-c1
           command:
           - cat
           tty: true
@@ -28,11 +18,18 @@ pipeline {
             limits:
               cpu: 1
               memory: 1Gi
+          volumeMounts:
+          - mountPath: "/home/default/.kube"
+            name: "dot-kube"
+            readOnly: false
         - name: jnlp
           resources:
             limits:
               cpu: 1
               memory: 1Gi
+        volumes:
+        - name: "dot-kube"
+          emptyDir: {}
       '''
     }
   }
@@ -42,17 +39,23 @@ pipeline {
     NAMESPACE = 'foundation-internal-webdev-apps'
     IMAGE_NAME = 'eclipsefdn/jakartablogs.ee'
     CONTAINER_NAME = 'planet-venus'
-    ENVIRONMENT = environmentFromBranch(env.BRANCH_NAME)
-    GIT_COMMIT_SHORT = sh(
-      script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+    ENVIRONMENT = sh(
+      script: """
+        if [ "${env.BRANCH_NAME}" = "master" ]; then
+          printf "production"
+        else
+          printf "${env.BRANCH_NAME}"
+        fi
+      """,
       returnStdout: true
     )
     TAG_NAME = sh(
       script: """
+        GIT_COMMIT_SHORT=\$(git rev-parse --short ${env.GIT_COMMIT})
         if [ "${env.ENVIRONMENT}" = "" ]; then
-          printf ${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
+          printf \${GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
         else
-          printf ${env.ENVIRONMENT}-${env.GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
+          printf ${env.ENVIRONMENT}-\${GIT_COMMIT_SHORT}-${env.BUILD_NUMBER}
         fi
       """,
       returnStdout: true
@@ -74,6 +77,8 @@ pipeline {
         label 'docker-build'
       }
       steps {
+        readTrusted 'Dockerfile'
+
         sh '''
           THEME_PATH="$(awk -F "=" '/output_theme/ {print $2}' planet/planet.ini | sed -e 's/^ *//' -e 's/ *$//')"
           WWW_PATH="$(awk -F "=" '/output_dir/ {print $2}' planet/planet.ini | sed -e 's/^ *//' -e 's/ *$//')"
@@ -117,23 +122,12 @@ pipeline {
       }
       steps {
         container('kubectl') {
-          withKubeConfig([credentialsId: '1d8095ea-7e9d-4e94-b799-6dadddfdd18a', serverUrl: 'https://console-int.c1-ci.eclipse.org']) {
-            sh '''
-              DEPLOYMENT="$(k8s getFirst deployment "${NAMESPACE}" "app=${APP_NAME},environment=${ENVIRONMENT}")"
-              if [[ $(echo "${DEPLOYMENT}" | jq -r 'length') -eq 0 ]]; then
-                echo "ERROR: Unable to find a deployment to patch matching 'app=${APP_NAME},environment=${ENVIRONMENT}' in namespace ${NAMESPACE}"
-                exit 1
-              else 
-                DEPLOYMENT_NAME="$(echo "${DEPLOYMENT}" | jq -r '.metadata.name')"
-                kubectl set image "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}" "${CONTAINER_NAME}=${IMAGE_NAME}:${TAG_NAME}" --record=true
-                if ! kubectl rollout status "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"; then
-                  # will fail if rollout does not succeed in less than .spec.progressDeadlineSeconds
-                  kubectl rollout undo "deployment.v1.apps/${DEPLOYMENT_NAME}" -n "${NAMESPACE}"
-                  exit 1
-                fi
-              fi
-            '''
-          }
+          updateContainerImage([
+            namespace: "${env.NAMESPACE}",
+            selector: "app=${env.APP_NAME},environment=${env.ENVIRONMENT}",
+            containerName: "${env.CONTAINER_NAME}",
+            newImageRef: "${env.IMAGE_NAME}:${env.TAG_NAME}"
+          ])
         }
       }
     }
