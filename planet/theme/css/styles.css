@@ -56,3 +56,8 @@ h1 {
 .media-body-content h4, .media-body-content h5, .media-body-content h6 {
   font-size: 15px;
 }
+
+.header-wrapper {
+  background-image: none;
+  background: #fff;
+}

@@ -48,6 +48,12 @@ How to run the application:
 docker-compose build && docker-compose up -d
 ```
 
+How to make changes to files and test those changes locally:
+
+```bash
+docker cp path/to/file.html [CONTAINER-ID]:/path/to/file.html
+```
+
 ## Contributing
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) the [jakartaee/jakartablogs.ee](https://github.com/jakartaee/jakartablogs.ee) repository
