@@ -128,6 +128,15 @@ pipeline {
             containerName: "${env.CONTAINER_NAME}",
             newImageRef: "${env.IMAGE_NAME}:${env.TAG_NAME}"
           ])
+          script {
+            def url = ''
+            if (env.ENVIRONMENT == 'production') {
+              url = 'https://jakartablogs.ee/'
+            } else if (env.ENVIRONMENT == 'staging') {
+              url = 'https://staging--jakartablogs-ee.eclipsecontent.org'
+            }
+            echo "✅ Deployment complete. Access the app at: ${url}"
+          }
         }
       }
     }

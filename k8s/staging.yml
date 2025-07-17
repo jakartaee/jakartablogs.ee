@@ -37,7 +37,7 @@ spec:
         - containerPort: 8080
         volumeMounts:
         - name: planet-www
-          mountPath: /usr/share/nginx/html/staging
+          mountPath: /usr/share/nginx/html
         resources:
           limits:
             cpu: '1'
@@ -51,7 +51,7 @@ spec:
             command:
             - test 
             - -f
-            - /usr/share/nginx/html/staging/index.html
+            - /usr/share/nginx/html/index.html
           initialDelaySeconds: 600
           periodSeconds: 10
           timeoutSeconds: 5
@@ -61,7 +61,7 @@ spec:
             command:
             - test 
             - -f
-            - /usr/share/nginx/html/staging/index.html
+            - /usr/share/nginx/html/index.html
           initialDelaySeconds: 5
           periodSeconds: 3
           timeoutSeconds: 5
@@ -110,8 +110,8 @@ metadata:
     haproxy.router.openshift.io/disable_cookies: "true"
     haproxy.router.openshift.io/balance: roundrobin
 spec:
-  host: "jakartablogs.ee"
-  path: "/staging"
+  host: "staging--jakartablogs-ee.eclipsecontent.org"
+  path: "/"
   port:
     targetPort: "http"
   tls:

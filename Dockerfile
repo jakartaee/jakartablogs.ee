@@ -14,7 +14,7 @@ ARG THEME_PATH
 COPY planet/ /tmp/planet
 RUN /tmp/planet/utils/genconfig.sh "${THEME_PATH}" "/tmp/planet/theme" > /tmp/config.ini
 
-FROM eclipsefdn/planet-venus:debian-10-slim
+FROM eclipsefdn/planet-venus:debian-11-slim
 
 ARG THEME_PATH
 ARG CACHE_PATH
