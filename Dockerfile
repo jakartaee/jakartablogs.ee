@@ -28,6 +28,14 @@ RUN mkdir -p "${THEME_PATH}" && chmod -R g+w "${THEME_PATH}" \
   && mkdir -p "${CACHE_PATH}" && chmod -R g+w "${CACHE_PATH}" \
   && mkdir -p "${WWW_PATH}" && chmod -R g+w "${WWW_PATH}"
 
+# Fix UTF-8 encoding: inject charset=utf-8 into Content-Type headers that
+# lack a charset parameter, preventing feedparser < 6.0 from falling back to
+# Windows-1252 / ISO-8859-1. See https://github.com/jakartaee/jakartablogs.ee/issues/121
+COPY planet/patches/fix-utf8-encoding.py /tmp/fix-utf8-encoding.py
+RUN python /tmp/fix-utf8-encoding.py \
+  && rm -f /opt/planet-venus/planet/spider.pyc \
+  && rm /tmp/fix-utf8-encoding.py
+
 COPY planet/planet.ini /var/planet/
 COPY planet/theme "${THEME_PATH}"
 COPY --from=configbuilder /tmp/config.ini "${THEME_PATH}"/
