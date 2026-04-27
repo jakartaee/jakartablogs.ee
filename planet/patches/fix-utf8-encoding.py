@@ -15,7 +15,7 @@ See: https://github.com/jakartaee/jakartablogs.ee/issues/121
 
 import sys
 
-SPIDER_PY = '/var/planet/spider.py'
+SPIDER_PY = '/usr/lib/python2.7/dist-packages/planet/spider.py'
 
 with open(SPIDER_PY, 'r') as f:
     content = f.read()

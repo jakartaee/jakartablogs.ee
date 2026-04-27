@@ -33,7 +33,7 @@ RUN mkdir -p "${THEME_PATH}" && chmod -R g+w "${THEME_PATH}" \
 # Windows-1252 / ISO-8859-1. See https://github.com/jakartaee/jakartablogs.ee/issues/121
 COPY planet/patches/fix-utf8-encoding.py /tmp/fix-utf8-encoding.py
 RUN python /tmp/fix-utf8-encoding.py \
-  && rm -f /var/planet/spider.pyc \
+  && rm -f /usr/lib/python2.7/dist-packages/planet/spider.pyc \
   && rm /tmp/fix-utf8-encoding.py
 
 COPY planet/planet.ini /var/planet/
