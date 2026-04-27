@@ -21,20 +21,26 @@ with open(SPIDER_PY, 'r') as f:
     content = f.read()
 
 # Target the line in httpThread where headers are attached to the feed object
+PATCH_MARKER = "# Fix: default to charset=utf-8 for XML feeds when Content-Type"
+
+if PATCH_MARKER in content:
+    print("Patch already applied to " + SPIDER_PY + ", skipping.")
+    sys.exit(0)
+
 old_code = "            setattr(feed, 'headers', resp)"
 new_code = (
-    "            # Fix: default to charset=utf-8 for XML feeds when Content-Type\n"
+    "            " + PATCH_MARKER + "\n"
     "            # does not specify a charset (RFC 7303 s9.1, issue #121).\n"
-    "            ctype = resp.get('content-type', '')\n"
-    "            if ctype and 'charset=' not in ctype.lower():\n"
-    "                resp['content-type'] = ctype + '; charset=utf-8'\n"
+    "            ctype = resp.get('content-type', '').lower()\n"
+    "            if 'xml' in ctype and 'charset=' not in ctype:\n"
+    "                resp['content-type'] = resp.get('content-type', '') + '; charset=utf-8'\n"
     "            setattr(feed, 'headers', resp)"
 )
 
 if old_code not in content:
-    print("WARNING: Could not find target line in " + SPIDER_PY)
-    print("The UTF-8 encoding fix may already be applied or spider.py has changed.")
-    sys.exit(0)
+    print("ERROR: Could not find target line in " + SPIDER_PY)
+    print("spider.py may have changed upstream. The patch needs to be updated.")
+    sys.exit(1)
 
 content = content.replace(old_code, new_code, 1)
 
